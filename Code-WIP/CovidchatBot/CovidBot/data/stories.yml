@@ -1,0 +1,186 @@
+version: "2.0"
+
+stories:
+
+- story: happy path
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_great
+  - action: utter_happy
+
+- story: sad path 1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - intent: affirm
+  - action: utter_happy
+
+- story: sad path 2
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - intent: deny
+  - action: utter_goodbye
+
+- story: path about time
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: give_time
+  - action: action_show_time
+
+- story: path about whatisit
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: faq_whatisit
+  - action: action_define_covid
+
+- story: path about covid cases
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: faq_covidStatus
+  - action: action_show_covidstat
+
+
+- story: covid_form_full
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: request_covid_test
+  - action: covid_test
+  - active_loop: covid_test
+  - slot_was_set:
+    - requested_slot: accept_form
+  - slot_was_set:
+    - accept_form: true
+  - slot_was_set:
+    - requested_slot: is_vaccinated
+  - slot_was_set:
+    - is_vaccinated: true
+  - slot_was_set:
+    - requested_slot: age
+  - slot_was_set:
+    - age: '30'
+  - slot_was_set:
+    - age: '30'
+  - slot_was_set:
+    - requested_slot: is_sick
+  - slot_was_set:
+    - is_sick: true
+  - slot_was_set:
+    - requested_slot: is_atrisk
+  - slot_was_set:
+    - is_atrisk: false
+  - slot_was_set:
+    - requested_slot: had_contact
+  - slot_was_set:
+    - had_contact: true
+  - slot_was_set:
+    - requested_slot: symptoms
+  - slot_was_set:
+    - symptoms: cough
+  - slot_was_set:
+    - symptoms: cough
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: action_show_covidresult
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: covid_form_risk
+  steps:
+  - slot_was_set:
+    - requested_slot: accept_form
+  - action: covid_test
+  - active_loop: covid_test
+  - slot_was_set:
+    - requested_slot: accept_form
+  - slot_was_set:
+    - accept_form: true
+  - slot_was_set:
+    - requested_slot: is_vaccinated
+  - slot_was_set:
+    - is_vaccinated: true
+  - slot_was_set:
+    - requested_slot: age
+  - slot_was_set:
+    - age: '20'
+  - slot_was_set:
+    - age: '20'
+  - slot_was_set:
+    - requested_slot: is_sick
+  - slot_was_set:
+    - is_sick: true
+  - slot_was_set:
+    - requested_slot: is_atrisk
+  - intent: affirm
+  - action: action_deactivate_loop
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: utter_emergency
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: request_covid_test
+  - action: covid_test
+  - active_loop: covid_test
+  - slot_was_set:
+    - requested_slot: accept_form
+  - intent: deny
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null  
+  - action: utter_deny_form
+
+- story: path about symptoms
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: faq_symptoms
+  - action: action_symptoms
+
+- story: path about prevention
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: faq_prevention
+  - action: action_prevention
+
+- story: path about curve
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: faq_curve
+  - action: action_curve
+
+- story: path about vaccine
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: faq_vaccine
+  - action: action_vaccine
+
+
+- story: interactive_story_2
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: faq_vaccine
+    entities:
+    - district: coimbatore
+  - action: action_vaccine
+  - intent: faq_symptoms
+  - action: action_symptoms

@@ -1,0 +1,214 @@
+version: "2.0"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - give_time
+  - faq_whatisit
+  - faq_covidStatus
+  - request_covid_test
+  - form_result
+  - out_of_scope
+  - inform
+  - faq_symptoms
+  - faq_prevention
+  - faq_curve
+  - faq_vaccine
+
+actions:
+  - action_show_time
+  - action_define_covid
+  - action_show_covidstat
+  - action_show_covidresult
+  - action_symptoms
+  - action_prevention
+  - action_curve
+  - action_spread
+  - action_vaccine
+
+responses:
+  utter_greet:
+  - text: "Hi there,I'm Coco and I am here to answer your questions related to Coronavirus"
+
+  utter_cheer_up:
+  - text: "Here is something to cheer you up:"
+    image: "https://i.imgur.com/nGF1K8f.jpg"
+
+  utter_did_that_help:
+  - text: "Did that help you?"
+
+  utter_happy:
+  - text: "Great, carry on!"
+    
+  utter_goodbye:
+  - text: "Toodles,Take care.Will catch up later!"
+
+  utter_iamabot:
+  - text: "Hi there! I'm Coco, a covid bot, powered by Rasa."
+
+  utter_ask_accept_form:
+  - text: "I’m going to ask you some questions. I will use your answers to give you advice about the level of medical care you should seek.\n⚠If you are experiencing a life-threatening emergency, please call 911 immediately. This service is not a substitute for consulting with your doctor.\nTo continue using this tool, please agree that you have read and understood the contents of this disclaimer."
+    buttons:
+      - title: "I agree"
+        payload: '/affirm'
+      - title: "I dont agree"
+        payload: '/deny'
+
+  utter_ask_is_vaccinated:
+  - text: "Are you fully vaccinated against COVID-19?"
+    buttons:
+      - title: "Yes"
+        payload: '/affirm'
+      - title: "No"
+        payload: '/deny'
+
+  utter_ask_age:
+  - text: "What is your age?"
+
+  utter_ask_is_sick:
+  - text: "Are you sick?"
+    buttons:
+      - title: "Yes"
+        payload: '/affirm'
+      - title: "No"
+        payload: '/deny'
+
+  utter_ask_is_atrisk:
+  - text: "Do you have any of these life-threatening symptoms?• Severe and constant pain or pressure in the chest • Difficulty breathing (such as gasping for air, being unable to walk or talk without catching your breath, severe wheezing)"
+    buttons:
+      - title: "Yes"
+        payload: '/affirm'
+      - title: "No"
+        payload: '/deny'
+
+  utter_ask_had_contact:
+  - text: "In the last two weeks, have you been in close contact with someone who has COVID-19?"
+    buttons:
+      - title: "Yes"
+        payload: '/affirm'
+      - title: "No"
+        payload: '/deny'
+      - title:  "I don't know"
+        payload: '/deny'
+
+  utter_ask_symptoms:
+  - text: "In the last 10 days, have you experienced any of the symptoms listed below?Fever or feeling feverish (such as chills, sweating)• Cough"
+
+  utter_emergency:
+  - text: "Based on your symptoms, you may need urgent medical care. Please call 911 or go to the nearest emergency department."
+
+  utter_deny_form:
+  - text: "Please consent to use the Coronavirus Self-Checker."
+
+  utter_symptoms:
+  - text: "The most common symptoms of COVID-19 are fever, tiredness, and dry cough. Some patients may have aches and pains, nasal congestion, runny nose, sore throat or diarrhea. These symptoms are usually mild and begin gradually."
+
+ 
+
+entities:
+  - state:
+      groups:
+      - TN
+      - KL
+      - AP
+      - AR
+      - AS
+      - BR
+      - CG
+      - DL
+      - GA
+      - GJ
+      - HR
+  - age
+  - symptoms
+  - district:
+        groups:
+          - 539
+          - 547
+          - 542
+          - 571
+          - 557
+          - 544
+          - 780
+          - 545
+          - 552
+          - 540
+          - 560
+          - 549
+          - 541
+  
+
+
+forms:
+  covid_test:
+    ignored_intents: 
+    - out_of_scope
+    required_slots:
+        accept_form:
+        - type: from_intent
+          value: True
+          intent: affirm
+        - type: from_intent
+          value: False
+          intent: deny
+        is_vaccinated:
+        - type: from_intent
+          value: True
+          intent: affirm
+        - type: from_intent
+          value: False
+          intent: deny
+        age:
+        - type: from_entity
+          entity: age
+        is_sick:
+        - type: from_intent
+          value: True
+          intent: affirm
+        - type: from_intent
+          value: False
+          intent: deny
+        is_atrisk:
+        - type: from_intent
+          value: True
+          intent: affirm
+        - type: from_intent
+          value: False
+          intent: deny
+        had_contact:
+        - type: from_intent
+          value: True
+          intent: affirm
+        - type: from_intent
+          value: False
+          intent: deny
+        symptoms:
+        - type: from_entity
+          entity: symptoms
+
+slots:
+  accept_form:
+    type: bool
+  is_vaccinated:
+    type: bool
+  age:
+    type: text
+  is_sick:
+    type: bool
+  is_atrisk:
+    type: bool
+  had_contact:
+    type: bool
+  symptoms:
+    type: text  
+
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+

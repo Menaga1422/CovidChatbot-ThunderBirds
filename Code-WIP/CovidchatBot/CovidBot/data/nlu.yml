@@ -1,0 +1,359 @@
+version: "2.0"
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+- intent: goodbye
+  examples: |
+    - good afternoon
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+    - I dont know
+- intent: mood_great
+  examples: |
+    - perfect
+    - great
+    - amazing
+    - feeling like a king
+    - wonderful
+    - I am feeling very good
+    - I am great
+    - I am amazing
+    - I am going to save the world
+    - super stoked
+    - extremely good
+    - so so perfect
+    - so good
+    - so perfect
+    - I am happy
+- intent: mood_unhappy
+  examples: |
+    - my day was horrible
+    - I am sad
+    - I don't feel very well
+    - I am disappointed
+    - super sad
+    - I'm so sad
+    - sad
+    - very sad
+    - unhappy
+    - not good
+    - not very good
+    - extremly sad
+    - so saad
+    - so sad
+    - not happy
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+- intent: give_time
+  examples: |
+    - can you tell me what time it is?
+    - time please?
+    - got the time
+    - what time is it
+- intent: faq_whatisit
+  examples: |
+    - how are viruses formed?
+    - how are viruses structured?
+    - how do viruses behave?
+    - how do viruses happen?
+    - how do viruses work?
+    - how does a pandemic work?
+    - how does an epidemic work?
+    - how does covid work?
+    - how is a virus structured?
+    - how is the corona virus structured?
+    - is covid-19 a virus?
+    - what are corona viruses?
+    - what are viruses?
+    - what do they mean by "pandemic"
+    - what do viruses look like?
+    - what does "pandemic" mean?
+    - what does a virus look like?
+    - what does an outbreak mean?
+    - what does covid mean?
+    - what does covid stand for?
+    - what does covid19 mean?
+    - what does covid-19 mean?
+    - what does covid19 stand for?
+    - what does it mean if we have a pandemic?
+    - what does it mean if we have an outbreak?
+    - what does outbreak mean?
+    - what is a pandemic?
+    - what is a virus?
+    - what is an epidemic?
+    - what is corona?
+    - what is covid-19
+    - what is pandemic
+    - what is the corona virus?
+    - what is the difference between and epidemic and a pandemic?
+    - what is the full name of coronavirus?
+    - what is the full name of covid-19?
+    - what is the full name of the virus?
+    - what is the structure of a virus?
+    - what is the structure of coronavirus
+    - what kind of disease is corona?
+    - what kind of illness is corona virus?
+    - why is it called corona virus?
+- intent: faq_covidStatus
+  examples: |
+    - [Tamil Nadu]{"entity": "state", "group": "TN"}
+    - [Andhra Pradesh]{"entity": "state", "group": "AP"}
+    - [Arunachal Pradesh]{"entity": "state", "group": "AR"}
+    - [Assam]{"entity": "state", "group": "AS"}
+    - [Bihar]{"entity": "state", "group": "BR"}
+    - [Chattisgarh]{"entity": "state", "group": "CG"}
+    - [Delhi]{"entity": "state", "group": "DL"}
+    - [Goa]{"entity": "state", "group": "GA"}
+    - [Gujarat]{"entity": "state", "group": "GJ"}
+    - [Haryana]{"entity": "state", "group": "HR"}
+    - [Kerala]{"entity": "state", "group": "KL"}
+    - how many covid cases are there in [Tamil Nadu]{"entity": "state", "group": "TN"}
+    - covid cases are there in [Kerala]{"entity": "state", "group": "KL"}
+- intent: request_covid_test
+  examples: |
+    - i am sick
+    - do i have covid?
+    - i want to check whether I have corona?
+    - i have fever
+    - i have cold
+    - i want to self asses
+    - i think i am sick
+- intent: inform
+  examples: |
+    - [18-30](age)
+    - i am [20 years](age) old
+    - [30-59](age)
+    - [cough](symptoms)
+    - i have [fever](symptoms)
+    - [Muscle aches](symptoms)
+    - [New loss of taste or smell](symptoms)
+    - [No symptoms](symptoms)
+    - [30](age)
+    - [20](age)
+- intent: out_of_scope
+  examples: |
+    - that's not what I want to do
+    - wait stop
+    - you're no help
+    - this is no help at all
+    - how old are you
+    - I want to order a pizza
+    - tell me the weather
+    - this isn't working
+    - I already told you that
+    - don't like that
+    - I don't want to tell you that
+    - none of your business
+    - that's not right
+    - stop asking
+    - nevermind
+    - I want to do something else
+    - I changed my mind
+- intent: faq_symptoms
+  examples: |
+    - am i going to die?
+    - am i going to need hospital treatment?
+    - are aches a symptom?
+    - are the symptoms serious?
+    - can i still have it but have no symptoms?
+    - can people die from contacting covid-19?
+    - can people die from contracting covid-19?
+    - can people die from coronavirus?
+    - can people die from this?
+    - can there be complications from covid-19 symptoms?
+    - can you be infected and not show any symptoms?
+    - can you tell me what the symptoms are?
+    - could i be carrying coronavirus if i don't have symptoms?
+    - does everyone have symptoms?
+    - how badly should i be coughing?
+    - how can i identify the symptoms of corona?
+    - how can i tell if i have corona virus?
+    - how do i know i have covid-19?
+    - how do i know i might be a carrier?
+    - how do i know i might have it?
+    - how do i know if i have a high temperature?
+    - how do i know if i have it?
+    - how do i know if i need hospital treatment?
+    - how do i know if i'm a carrier of covid-19?
+    - how do i know if i've caught coronavirus?
+    - how do i know if i've caught it?
+    - how high does my fever have to be for me to go to hospital?
+    - how high is a fever?
+    - how is your body affected by corona?
+    - how long do i have to be sick for before i can go to a clinic?
+    - how long should i have a fever for?
+    - how severe do my symptoms have to be before i go to hospital?
+    - how would my body feel if i caught the virus?
+    - i have a fever, do i have corona?
+    - i'm coughing, what should i do?
+    - is a symptom?
+    - is coughing a symptom of the disease?
+    - is joint pain a symptom?
+    - should i go to a health centre if i have symptoms?
+    - what are the signs and symptoms?
+    - what are the signs of corona?
+    - what are the signs of covid-19?
+    - what are the signs?
+    - what are the symptoms?
+    - what counts as a high temperature?
+    - what do aches and pains mean?
+    - what do the symptoms look like?
+    - what does a high temperature feel like?
+    - what does asymptomatic mean?
+    - what does dry cough mean?
+    - what does having corona feel like?
+    - what does having corona virus feel like?
+    - what does having the virus feel like?
+    - what does it mean if i'm coughing?
+    - what does it mean to be asymptomatic?
+    - what does persistent cough mean?
+    - what does the virus do to your body?
+    - what does this virus do to the body?
+    - what is a dry cough?
+    - what is a fever?
+    - what is a high temperatures?
+    - what is an asymptomatic carrier?
+    - what is different about a dry cough?
+    - what should i do if i think i have it?
+    - what should i do if i think i might have corona virus?
+    - what signs of covid-19 should i look for?
+    - what temperature is a fever?
+    - when do i need to go to a clinic?
+    - when is a cough persistent?
+    - when should i go to hospital?
+    - when should i go to the emergency room?
+    - What happens If i get  Coronavirus?
+    - What does Coronavirus do?
+    - How does human body behave if i get coronavirus?
+    - how do I know I have covid
+- intent: faq_prevention
+  examples: |
+    - can soap help keep the virus off my hands?
+    - can soap help with corona virus?
+    - do i need to use hand sanitiser?
+    - how does hand-sanitiser work?
+    - how does soap help keep the virus away?
+    - how long should i hand-wash for?
+    - how often should i wash my hands
+    - how should i wash my hands
+    - should i use soap or hand sanitiser?
+    - what amount of alcohol is needed in hand gel?
+    - what are good methods for handwashing?
+    - what are the handwashing techniques
+    - what are the hand-washing techniques?
+    - what are the instructions for hand-washing
+    - what are the techniques for hand washing?
+    - what is important about hand-washing?
+    - what is the guidance for handwashing
+    - what strength percentage of alcohol is required for hand gel to work?
+    - when should i wash my hands
+    - why do i need to use soap?
+    - why do i need to wash my hands
+    - why does soap help with containing covid 19?
+    - How to protect myself from corono?
+    - How to avoid spreading corona?
+    - How to stop spreading corona?
+    - What can I do to protect myself and prevent the spread of disease?
+    - what are the prevention measures for corono?
+    - what are the safety measures for corono?
+    - what are the tips for preventing corona?
+- intent: faq_curve
+  examples: |
+    - can we prevent spikes in the infection rate?
+    - can we reduce the number of cases?
+    - how can you slow the infection?
+    - how do we flatten the curve
+    - how do we prevent spikes in the number of infected people?
+    - how do we reduce the number of cases?
+    - how does health care capacity relate to the curve?
+    - how does healthcare capacity relate to the curve
+    - how fast can it spread?
+    - how fast is covid-19 spreading?
+    - how quickly can it spread?
+    - how quickly could corona virus spread?
+    - how quickly could the health service be overwhelmed?
+    - how quickly could this get out of control?
+    - how quickly is it spreading?
+    - how quickly should coronavirus spread?
+    - how quickly will it spread?
+    - reducing the frequency of cases
+    - slow the rate of infection
+    - what are spikes
+    - what are spikes and why do they happen?
+    - what are spikes and why should we try to slow them?
+    - what does a spike in cases look like?
+    - what does it mean the flatten the curve
+    - what happens when there's a surge in cases?
+    - what happens when you reduce the number of cases?
+    - what is a fast spread?
+    - what is a slow spread?
+    - what is flattening the curve
+    - what is healthcare system capacity
+    - what is infection rate
+    - what is the curve of cases
+    - what is the difference between a fast spread and a slow spread?
+    - what is the difference between and fast and slow pandemic?
+    - when do spikes in infection rate occur?
+    - why are there spikes in the frequency of cases
+    - why do infections suddenly spike
+    - why do you need to slow the infection
+    - why should we try to slow the infection?
+- intent: faq_vaccine
+  examples: |
+    - [coimbatore]{"entity": "district", "group": "539"}
+    - [cuddalore]{"entity": "district", "group": "547"}
+    - [villupuram]{"entity": "district", "group": "542"}
+    - [chennai]{"entity": "district", "group": "571"}
+    - [kanchipuram]{"entity": "district", "group": "557"}
+    - [kanyakumari]{"entity": "district", "group": "544"}
+    - [kovilpatti]{"entity": "district", "group": "780"}
+    - [kallakurichi]{"entity": "district", "group": "552"}
+    - [madurai]{"entity": "district", "group": "540"}
+    - [salem]{"entity": "district", "group": "545"}
+    - [tiruchirappalli]{"entity": "district", "group": "560"}
+    - [virudhunagar]{"entity": "district", "group": "549"}
+    - [thanjavur]{"entity": "district", "group": "541"}
+    - vaccine center in [chennai]{"entity": "district", "group": "571"}
+    - vaccine centres in [coimbatore]{"entity": "district", "group": "539"}

@@ -1,0 +1,32 @@
+version: "2.0"
+
+rules:
+
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: Say 'I am a bot' anytime the user challenges
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+
+- rule: Activate form
+  steps:
+  - intent: request_covid_test
+  - action: covid_test
+  - active_loop: covid_test
+
+- rule: Submit form
+  condition:
+  # Condition that form is active.
+  - active_loop: covid_test
+  steps:
+  # Form is deactivated
+  - action: covid_test
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  # The actions we want to run when the form is submitted.
+  - action: action_show_covidresult
