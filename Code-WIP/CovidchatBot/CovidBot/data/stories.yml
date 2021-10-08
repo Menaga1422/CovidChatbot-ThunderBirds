@@ -174,13 +174,13 @@ stories:
   - action: action_vaccine
 
 
-- story: interactive_story_2
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: faq_vaccine
-    entities:
-    - district: coimbatore
-  - action: action_vaccine
-  - intent: faq_symptoms
-  - action: action_symptoms
+# - story: interactive_story_2
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: faq_vaccine
+#     entities:
+#     - district: coimbatore
+#   - action: action_vaccine
+#   - intent: faq_symptoms
+#   - action: action_symptoms

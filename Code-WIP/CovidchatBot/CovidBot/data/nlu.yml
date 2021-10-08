@@ -197,6 +197,7 @@ nlu:
     - am i going to need hospital treatment?
     - are aches a symptom?
     - are the symptoms serious?
+    - symptoms of covid
     - can i still have it but have no symptoms?
     - can people die from contacting covid-19?
     - can people die from contracting covid-19?
@@ -357,3 +358,4 @@ nlu:
     - [thanjavur]{"entity": "district", "group": "541"}
     - vaccine center in [chennai]{"entity": "district", "group": "571"}
     - vaccine centres in [coimbatore]{"entity": "district", "group": "539"}
+    - vaccination center in [chennai]{"entity": "district", "group": "571"}

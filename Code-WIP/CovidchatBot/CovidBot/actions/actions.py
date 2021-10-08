@@ -134,7 +134,7 @@ class ActionSymptoms(Action):
         return []
 
 
-class ActionPrevention1(Action):
+class ActionPrevention(Action):
     def name(self) -> Text:
         return "action_prevention"
 
@@ -143,6 +143,12 @@ class ActionPrevention1(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         user_text = tracker.latest_message['text'].casefold()
+        message="""Steps to follow every day:
+	• Get a COVID-19 vaccine as soon as you can when eligible. Individuals 12 years old and over are currently eligible. Continue to follow the steps below every day until you are fully vaccinated.*
+	• Wear a mask over your nose and mouth.*
+	• Stay at least 6 feet away from people who don’t live with you.*
+	• Avoid crowded areas and poorly ventilated spaces.*
+	• Wash your hands often with soap and water, or use hand sanitizer with at least 60% alcohol."""
 
         if ("santitizer" in user_text):
             response = """Sanitizers are anti-microbial by their inherent chemical action. And they are effective in killing almost all microbes except 3 viruses (clostridium difficile, cryptosporum and noravirus.) 
@@ -162,20 +168,14 @@ Before and after changing contact lenses."""
             response = "Regular handwashing is one of the best ways to remove germs, avoid getting sick, and prevent the spread of germs to others.Washing your hands with soap and water or using alcohol-based handrub kills viruses that may be on your hands."
 
         elif ("prevent" in user_text or "protect" in user_text or "safe" in user_text or "avoid" in user_text or "tips" in user_text or "reduce" in user_text):
-            response = """Maintain a safe distance from others (at least 1 metre), even if they don’t appear to be sick.
-Wear a mask in public, especially indoors or when physical distancing is not possible.
-Choose open, well-ventilated spaces over closed ones. Open a window if indoors.
-Clean your hands often. Use soap and water, or an alcohol-based hand rub.
-Get vaccinated when it’s your turn. Follow local guidance about vaccination.
-Cover your nose and mouth with your bent elbow or a tissue when you cough or sneeze.
-Stay home if you feel unwell."""
+            response = "Avoid touching surfaces, especially in public settings or health facilities, in case people infected with COVID-19 have touched them. Clean surfaces regularly with standard disinfectants"
 
         elif ("percent" in user_text or "%" in user_text or "amount" in user_text):
             response = "Alcohol-based hand sanitizers should contain at least 60% ethyl alcohol or isopropyl alcohol. These alcohols work to kill bacteria and viruses"
 
         else:
             response = "COVID-19 is the disease caused by a new coronavirus called SARS-CoV-2.WHO first learned of this new virus on 31 December 2019, following a report of a cluster of cases of ‘viral pneumonia’ in Wuhan, People’s Republic of China."
-        dispatcher.utter_message(text=response)
+        dispatcher.utter_message(text=response,attachment=message)
 
         return []
 
@@ -216,33 +216,6 @@ A growth factor below 1 (or above 1 but trending downward) is a positive sign, w
         return []
 
 
-class ActionSpread(Action):
-
-    def name(self) -> Text:
-        return "action_spread"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        user_text = tracker.latest_message['text']
-        if("avoid" in user_text or "protect " in user_text or "stop" in user_text):
-            response = "Avoid touching surfaces, especially in public settings or health facilities, in case people infected with COVID-19 have touched them. Clean surfaces regularly with standard disinfectants.Frequently clean your hands with soap and water, or an alcohol-based hand rub."
-        elif("another person" in user_text or "someone" in user_text):
-            response = "Experts believe the virus that causes COVID-19 spreads mainly from person to person.Researchers say that on average, every person who has COVID-19 will pass it on to 2 or 2.5 others."
-        elif("contagious" in user_text):
-            response = "Whether or not they have symptoms, infected people can be contagious and the virus can spread from them to other people."
-        elif("surface" in user_text or "clean" in user_text or "unclean" in user_text or "dirty"):
-            response = "The viruses that causes COVID-19 can land on surfaces.Cleaning and disinfecting surfaces can also reduce the risk of infection."
-        elif("cough" in user_text or "eye" in user_text or "sneeze" in user_text):
-            response = "To gain access to your cells, the viral droplets may enter through the eyes, the nose or the mouth. Some experts believe that sneezing and coughing are most likely the primary forms of transmission.Coronavirus can survive on human skin for up to nine hours."
-        elif("hand" in user_text or "face" in user_text):
-            response = "Hands touch too many surfaces and can quickly pick up viruses. Once contaminated, hands can transfer the virus to your face, from where the virus can move inside your body, making you feel unwell.Coronavirus can stay on the hands for eight hours to 14 days depending on the temperature."
-        elif("happen" in user_text):
-            response = "COVID-19 affects different people in different ways. Most infected people will develop mild to moderate illness and recover without hospitalization."
-        else:
-            response = "The new coronavirus is a respiratory virus which spreads primarily through droplets generated when an infected person coughs or sneezes, or through droplets of saliva or discharge from the nose."
-        dispatcher.utter_message(text=response)
-        return []
 
 
 class ActionVaccine(Action):
@@ -262,10 +235,10 @@ class ActionVaccine(Action):
                 district = i['group']
             response = "Please check the spelling"
 
-        print(district)
+        # print(district)
         now = dt.datetime.now()
         date = now.strftime("%d-%m-%Y")
-        print("date"+date)
+        # print("date"+date)
 
         URL = 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id={}&date={}'.format(
             district, date)
@@ -295,6 +268,6 @@ class ActionVaccine(Action):
         if(counter == 0):
             response = "No available slots"
 
-        print("HIII")
+        
         dispatcher.utter_message(text=response)
         return []
