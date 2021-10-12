@@ -173,14 +173,39 @@ stories:
   - intent: faq_vaccine
   - action: action_vaccine
 
+- story: path about distancing
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: faq_distancing
+  - action: action_distance
 
-# - story: interactive_story_2
-#   steps:
-#   - intent: greet
-#   - action: utter_greet
-#   - intent: faq_vaccine
-#     entities:
-#     - district: coimbatore
-#   - action: action_vaccine
-#   - intent: faq_symptoms
-#   - action: action_symptoms
+
+- story: path about test
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: faq_testing
+  - action: action_test
+
+
+- story: path about time
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: faq_timescale
+  - action: action_time
+  
+- story: path about vulnerable_qn
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: faq_vulnerable
+  - action: action_vulnerable
+
+- story: path about origin
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: faq_origin
+  - action: action_origin

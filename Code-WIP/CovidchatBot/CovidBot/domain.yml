@@ -19,6 +19,12 @@ intents:
   - faq_prevention
   - faq_curve
   - faq_vaccine
+  - faq_distancing
+  - faq_testing
+  - faq_timescale
+  - faq_vulnerable
+  - faq_origin
+
 
 actions:
   - action_show_time
@@ -30,10 +36,15 @@ actions:
   - action_curve
   - action_spread
   - action_vaccine
+  - action_distance
+  - action_test
+  - action_time
+  - action_vulnerable
+  - action_origin
 
 responses:
   utter_greet:
-  - text: "Hi there,I'm Coco and I am here to answer your questions related to Coronavirus"
+  - text: "how can I help you today?😀"
 
   utter_cheer_up:
   - text: "Here is something to cheer you up:"

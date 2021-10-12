@@ -1,4 +1,5 @@
 import datetime as dt
+from logging import NullHandler
 from typing import Any, Text, Dict, List, Union
 
 from rasa_sdk import Action, Tracker
@@ -39,7 +40,7 @@ class ActionDefineCovid(Action):
         else:
             response = "COVID-19 is the disease caused by a new coronavirus called SARS-CoV-2.WHO first learned of this new virus on 31 December 2019, following a report of a cluster of cases of ‘viral pneumonia’ in Wuhan, People’s Republic of China."
         dispatcher.utter_message(
-            text=response, image="https://flowextra.com/public/images/news/1609397129Education%20sector%20bogged%20down%20by%20COVID-19%20lockdown,%20strikes%20in%202020.jpg")
+            text=response, image="https://www.fda.gov/files/Coronavirus_3D_illustration_by_CDC_1600x900.png")
 
         return []
 
@@ -73,7 +74,7 @@ class ActionDefineCovid(Action):
                     " vaccinated1 : " + str(data["total"]["vaccinated1"]) +\
                     " vaccinated2 : " + str(data["total"]["vaccinated2"])
 
-        dispatcher.utter_message(text="Data", attachment=message)
+        dispatcher.utter_message(text=message)
         return []
 
 
@@ -143,15 +144,14 @@ class ActionPrevention(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         user_text = tracker.latest_message['text'].casefold()
-        message="""Steps to follow every day:
-	• Get a COVID-19 vaccine as soon as you can when eligible. Individuals 12 years old and over are currently eligible. Continue to follow the steps below every day until you are fully vaccinated.*
-	• Wear a mask over your nose and mouth.*
-	• Stay at least 6 feet away from people who don’t live with you.*
-	• Avoid crowded areas and poorly ventilated spaces.*
-	• Wash your hands often with soap and water, or use hand sanitizer with at least 60% alcohol."""
+        message = """<b>Get a COVID-19 vaccine as soon as you can when eligible. Individuals 12 years old and over are currently eligible. </b>Continue to follow the steps below every day until you are fully vaccinated.
+	<br>• Wear a <b>mask </b>over your nose and mouth.
+	<br>• Stay at least<b> 6 feet </b>away from people who don’t live with you.
+	<br>• Avoid crowded areas and poorly ventilated spaces.
+	<br>• <b>Wash your hands</b> often with soap and water, or use hand sanitizer with at least 60% alcohol."""
 
         if ("santitizer" in user_text):
-            response = """Sanitizers are anti-microbial by their inherent chemical action. And they are effective in killing almost all microbes except 3 viruses (clostridium difficile, cryptosporum and noravirus.) 
+            response = """Sanitizers are anti-microbial by their inherent chemical action. And they are effective in killing almost all microbes.
 Do not use hand-sanitizer if your hands are dirty and greasy. First clean your hands with soap and water and then use a sanitizer."""
 
         elif("when" in user_text or "long" in user_text or "often" in user_text):
@@ -167,15 +167,15 @@ Before and after changing contact lenses."""
         elif "hand" in user_text or "soap" in user_text:
             response = "Regular handwashing is one of the best ways to remove germs, avoid getting sick, and prevent the spread of germs to others.Washing your hands with soap and water or using alcohol-based handrub kills viruses that may be on your hands."
 
-        elif ("prevent" in user_text or "protect" in user_text or "safe" in user_text or "avoid" in user_text or "tips" in user_text or "reduce" in user_text):
+        elif ("tips" in user_text or "contact" in user_text or "surface" in user_text):
             response = "Avoid touching surfaces, especially in public settings or health facilities, in case people infected with COVID-19 have touched them. Clean surfaces regularly with standard disinfectants"
 
         elif ("percent" in user_text or "%" in user_text or "amount" in user_text):
             response = "Alcohol-based hand sanitizers should contain at least 60% ethyl alcohol or isopropyl alcohol. These alcohols work to kill bacteria and viruses"
 
         else:
-            response = "COVID-19 is the disease caused by a new coronavirus called SARS-CoV-2.WHO first learned of this new virus on 31 December 2019, following a report of a cluster of cases of ‘viral pneumonia’ in Wuhan, People’s Republic of China."
-        dispatcher.utter_message(text=response,attachment=message)
+            response = message
+        dispatcher.utter_message(text=response, attachment=message)
 
         return []
 
@@ -216,8 +216,6 @@ A growth factor below 1 (or above 1 but trending downward) is a positive sign, w
         return []
 
 
-
-
 class ActionVaccine(Action):
     header = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'}
@@ -230,6 +228,7 @@ class ActionVaccine(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         entities = tracker.latest_message["entities"]
+        district = "none"
         for i in entities:
             if i['entity'] == "district":
                 district = i['group']
@@ -239,35 +238,145 @@ class ActionVaccine(Action):
         now = dt.datetime.now()
         date = now.strftime("%d-%m-%Y")
         # print("date"+date)
+        if(district == "none"):
+            response = "Give your district name"
+        else:
+            URL = 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id={}&date={}'.format(
+                district, date)
+            header = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'}
+            counter = 0
+            result = requests.get(URL, headers=header)
+            response_json = result.json()
+            data = response_json["sessions"]
 
-        URL = 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id={}&date={}'.format(
-            district, date)
-        header = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'}
-        counter = 0
-        result = requests.get(URL, headers=header)
-        response_json = result.json()
-        data = response_json["sessions"]
+            for each in data:
+                if((each["available_capacity"] > 0) & (each["min_age_limit"] == 18)):
+                    counter += 1
 
-        for each in data:
-            if((each["available_capacity"] > 0) & (each["min_age_limit"] == 18)):
-                counter += 1
+                    response = "<b>Vaccine Center:</b> " + str(each["name"])+'\n' +\
+                        "<br><b>Address: </b>" + str(each["address"])+'\n' +\
+                        "<br><b>Opening Time:</b> " + str(each["from"])+'\n' +\
+                        "<br><b>Closing Time:</b> " + str(each["to"])+'\n' +\
+                        "<br><b>Available Capacity:</b> " + str(each["available_capacity"])+'\n' +\
+                        "<br><b>Available capacity dose1:</b> " + str(each["available_capacity_dose1"])+'\n' +\
+                        "<br><b>Available capacity dose2:</b> " + str(each["available_capacity_dose2"])+'\n' +\
+                        "<br>Fees: " + str(each["fee"])+'\n' +\
+                        "<br>Vaccine Name: " + str(each["vaccine"])+'\n' +\
+                        "<br>Slots: " + str(each["slots"])
 
-                response = "Vaccine Center: " + str(each["name"])+'\n' +\
-                    "Address: " + str(each["address"])+'\n' +\
-                    "Pincode: " + str(each["pincode"])+'\n' +\
-                    "Opening Time: " + str(each["from"])+'\n' +\
-                    "Closing Time: " + str(each["to"])+'\n' +\
-                    "Available Capacity: " + str(each["available_capacity"])+'\n' +\
-                    "Available capacity dose1: " + str(each["available_capacity_dose1"])+'\n' +\
-                    "Available capacity dose2: " + str(each["available_capacity_dose2"])+'\n' +\
-                    "Fees: " + str(each["fee"])+'\n' +\
-                    "Vaccine Name: " + str(each["vaccine"])+'\n' +\
-                    "Slots: " + str(each["slots"])
+            if(counter == 0):
+                response = "No available slots"
 
-        if(counter == 0):
-            response = "No available slots"
+        dispatcher.utter_message(text=response)
+        return []
 
-        
+
+class ActionDistance(Action):
+
+    def name(self) -> Text:
+        return "action_distance"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        user_text = tracker.latest_message['text']
+        if "isolat" in user_text:
+            response = "Isolation is used to separate people infected with COVID-19 from those who are not infected.People who are in isolation should stay home until it’s safe for them to be around others. At home, anyone sick or infected should separate from others, stay in a specific “sick room” or area, and use a separate bathroom."
+        elif "quarantine" in user_text:
+            response = "Quarantine if you have been in close contact with someone who has COVID-19, unless you have been fully vaccinated. People who are fully vaccinated do NOT need to quarantine after contact with someone who had COVID-19 unless they have symptoms. However, fully vaccinated people should get tested 3-5 days after their exposure, even if they don’t have symptoms and wear a mask indoors in public for 14 days following exposure or until their test result is negative.This will help to stop the spread over the country."
+        elif "distance" in user_text or "length" in user_text or "gap" in user_text:
+            response = "Social distancing is a non-pharmaceutical infection prevention and control intervention implemented to avoid/decrease contact between those who are infected with a disease causing pathogen and those who are not, so as to stop or slow down the rate and extent of disease transmission in a community.Ensure physical distancing of minimum 1metre."
+        else:
+            response = "To reduce the risk of getting affected by covid.Stay indoors and avoid outdoors."
+        dispatcher.utter_message(text=response)
+
+        return []
+
+
+class ActionTest(Action):
+
+    def name(self) -> Text:
+        return "action_test"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        user_text = tracker.latest_message['text']
+        response = '''1️⃣ Rapid diagnostic test (RDT) of a sample of the respiratory tract of a person helps to detect the viral proteins (antigens) related to COVID-19 virus. This ensures a speedy and accurate diagnosis and its usage is CDC-approved.
+        <br>2️⃣ Polymerase chain reaction (PCR) tests are sent away to a lab to diagnose disease
+        <br>3️⃣ Lateral flow tests (LFTs) can diagnose Covid-19 on the spot, but aren’t as accurate as PCR tests
+        <br>4️⃣ Antibody (or serology) tests can’t diagnose active infection, but they can help to tell if a person has immunity to Covid-19
+        '''
+        dispatcher.utter_message(text=response)
+
+        return []
+
+
+class ActionTime(Action):
+
+    def name(self) -> Text:
+        return "action_time"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        user_text = tracker.latest_message['text']
+        if "change" in user_text or 'mutate' in user_text:
+            response = "Compared with HIV, SARS-CoV-2 is changing much more slowly as it spreads. But one mutation stood out to Korber. It was in the gene encoding the spike protein, which helps virus particles to penetrate cells. Korber saw the mutation appearing again and again in samples from people with COVID-19. At the 614th amino-acid position of the spike protein, the amino acid aspartate (D, in biochemical shorthand) was regularly being replaced by glycine (G) because of a copying fault that altered a single nucleotide in the virus’s 29,903-letter RNA code. Virologists were calling it the D614G mutation."
+        elif "time" in user_text or "month" in user_text or "season" in user_text or "summer" in user_text or "winter" in user_text or "autumn" in user_text or "long" in user_text or "last" in user_text or "year" in user_text or "normal" in user_text or "away" in user_text or "over" in user_text or "end" in user_text:
+            response = " Scientists think the virus that causes COVID-19 may be with us for decades or longer, but that doesn’t mean it will keep posing the same threat.The virus emerged in late 2019 and it’s difficult to predict how it will behave over the long term. But many experts believe it’s likely the disease will eventually ease from a crisis to a nuisance like the common cold."
+        dispatcher.utter_message(text=response)
+
+        return []
+
+
+class ActionVulnerable(Action):
+
+    def name(self) -> Text:
+        return "action_vulnerable"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        user_text = tracker.latest_message['text']
+        if ("children" in user_text or "baby" in user_text):
+            response = "Children of all ages can become ill with coronavirus disease 2019. But most kids who are infected typically don't become as sick as adults and some might not show any symptoms at all."
+        elif("pet" in user_text or "cat" in user_text or "dog" in user_text):
+            response = "A small number of pets worldwide, including cats and dogs, have been reported to be infected with the virus that causes COVID-19, mostly after close contact with people with COVID-19."
+        elif("pregnant" in user_text):
+            response = "Pregnant women do not appear more likely to contract the infection than the general population. However, pregnancy itself alters the body’s immune system and response to viral infections in general, which can occasionally be related to more severe symptoms and this will be the same for COVID-19."
+        elif("age" in user_text or "group" in user_text):
+            response = " Population groups of 20-49 years of age and 50 years-above were highly vulnerable to infection. Interestingly, 20-49 years of age group was most affected in India. However, higher population of the deceased were reported in the 50 years-above in all countries."
+        elif("aged" in user_text or "elder" in user_text or "parents" in user_text):
+            response = "Although all age groups are at risk of contracting COVID-19, older people face significant risk of developing severe illness if they contract the disease due to physiological changes that come with ageing and potential underlying health conditions."
+        elif("asthma" in user_text or "cancer" in user_text or "disease" in user_text):
+            response = "Health conditions, such as heart or lung disease, can increase your risk of developing dangerous symptoms if you become infected with coronavirus disease 2019."
+        elif("ventilator" in user_text or "severe" in user_text or "intense care" in user_text):
+            response = "Ventilators can be lifesaving for people with severe respiratory symptoms. Roughly 2.5 percentTrusted Source of people with COVID-19 will need a mechanical ventilator."
+        else:
+            response = "People of all ages can be infected by the COVID-19 virus.Older people and younger people can be infected by the COVID-19 virus. Older people, and people with pre-existing medical conditions such as asthma, diabetes, and heart disease appear to be more vulnerable to becoming severely ill with the virus."
+
+        dispatcher.utter_message(text=response)
+        return []
+
+
+class ActionOrigin(Action):
+
+    def name(self) -> Text:
+        return "action_origin"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        user_text = tracker.latest_message['text']
+        if("start" in user_text or "detect" in user_text or "come" in user_text):
+            response = "The outbreak of Novel coronavirus disease (COVID-19) was initially noticed in a seafood market in Wuhan city in Hubei Province of China in mid- December, 2019, has now spread to 215 countries/territories/areas worldwide."
+        else:
+            response = "Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) is a novel severe acute respiratory syndrome coronavirus. It was first isolated from three people with pneumonia connected to the cluster of acute respiratory illness cases in Wuhan. All structural features of the novel SARS-CoV-2 virus particle occur in related coronaviruses in nature."
+
         dispatcher.utter_message(text=response)
         return []
