@@ -45,6 +45,19 @@ actions:
 responses:
   utter_greet:
   - text: "how can I help you today?😀"
+    custom:
+        payload: quickReplies
+        data:
+        - title: "symptoms"
+          payload: "faq_symptoms"
+        - title: "preventions"
+          payload: "faq_prevention"
+        - title: "Self Assess"
+          payload: "request_covid_test"
+        - title: "vaccine centers"
+          payload: "faq_vaccine"
+        - title: "covid cases"
+          payload: "faq_covidStatus"
 
   utter_cheer_up:
   - text: "Here is something to cheer you up:"

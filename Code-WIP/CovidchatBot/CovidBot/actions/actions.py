@@ -35,7 +35,7 @@ class ActionDefineCovid(Action):
         if "structure" in user_text:
             response = "SARS-CoV-2 is a single-stranded RNA-enveloped virus. An RNA-based metagenomic next-generation sequencing approach has been applied to characterize its entire genome, which is 29,881 bp in length, encoding 9860 amino acids. Gene fragments express structural and nonstructural proteins."
 
-        elif ("full" in user_text or "expansion" in user_text or "stands for" in user_text):
+        elif ("full" in user_text or "expansion" in user_text or "stands for" in user_text or 'word' in user_text):
             response = "'CO' stands for corona, 'VI' for virus, and 'D' for disease. Formerly, this disease was referred to as '2019 novel coronavirus' or '2019-nCoV.' The COVID-19 virus is a new virus linked to the same family of viruses as Severe Acute Respiratory Syndrome (SARS) and some types of common cold."
         else:
             response = "COVID-19 is the disease caused by a new coronavirus called SARS-CoV-2.WHO first learned of this new virus on 31 December 2019, following a report of a cluster of cases of ‘viral pneumonia’ in Wuhan, People’s Republic of China."
@@ -60,19 +60,21 @@ class ActionDefineCovid(Action):
         entities = tracker.latest_message["entities"]
         print("Message", entities)
         state = None
+        if entities == "none":
+            message = "Give your state name"
+        else:
+            for i in entities:
+                if i['entity'] == "state":
+                    state = i['group']
+                message = "Please check the spelling"
 
-        for i in entities:
-            if i['entity'] == "state":
-                state = i['group']
-            message = "Please check the spelling"
-
-        for key, data in response.items():
-            if key == state:
-                message = "confirmed : " + str(data["total"]["confirmed"])+" \ndeceased" + str(data["total"]["deceased"]) +\
-                    " recovered : " + str(data["total"]["recovered"]) +\
-                    " tested : " + str(data["total"]["tested"]) +\
-                    " vaccinated1 : " + str(data["total"]["vaccinated1"]) +\
-                    " vaccinated2 : " + str(data["total"]["vaccinated2"])
+            for key, data in response.items():
+                if key == state:
+                    message = "confirmed : " + str(data["total"]["confirmed"])+" \ndeceased" + str(data["total"]["deceased"]) +\
+                        " recovered : " + str(data["total"]["recovered"]) +\
+                        " tested : " + str(data["total"]["tested"]) +\
+                        " vaccinated1 : " + str(data["total"]["vaccinated1"]) +\
+                        " vaccinated2 : " + str(data["total"]["vaccinated2"])
 
         dispatcher.utter_message(text=message)
         return []
@@ -327,6 +329,8 @@ class ActionTime(Action):
         user_text = tracker.latest_message['text']
         if "change" in user_text or 'mutate' in user_text:
             response = "Compared with HIV, SARS-CoV-2 is changing much more slowly as it spreads. But one mutation stood out to Korber. It was in the gene encoding the spike protein, which helps virus particles to penetrate cells. Korber saw the mutation appearing again and again in samples from people with COVID-19. At the 614th amino-acid position of the spike protein, the amino acid aspartate (D, in biochemical shorthand) was regularly being replaced by glycine (G) because of a copying fault that altered a single nucleotide in the virus’s 29,903-letter RNA code. Virologists were calling it the D614G mutation."
+        elif "pandemic" in user_text:
+            response = "The World Health Organization (WHO) on March 11, 2020, has declared the novel coronavirus (COVID-19) outbreak a global pandemic "
         elif "time" in user_text or "month" in user_text or "season" in user_text or "summer" in user_text or "winter" in user_text or "autumn" in user_text or "long" in user_text or "last" in user_text or "year" in user_text or "normal" in user_text or "away" in user_text or "over" in user_text or "end" in user_text:
             response = " Scientists think the virus that causes COVID-19 may be with us for decades or longer, but that doesn’t mean it will keep posing the same threat.The virus emerged in late 2019 and it’s difficult to predict how it will behave over the long term. But many experts believe it’s likely the disease will eventually ease from a crisis to a nuisance like the common cold."
         dispatcher.utter_message(text=response)

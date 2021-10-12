@@ -137,6 +137,8 @@ nlu:
     - what kind of illness is corona virus?
     - why is it called corona virus?
     - define covid
+    - what do you know about covid
+    - tell me something about covid
 - intent: faq_covidStatus
   examples: |
     - [Tamil Nadu]{"entity": "state", "group": "TN"}
